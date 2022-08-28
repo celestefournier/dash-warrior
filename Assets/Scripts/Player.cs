@@ -1,19 +1,27 @@
-using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] GameObject aim;
     [SerializeField] float speed;
-    [SerializeField] float drag;
+    [SerializeField] TMP_Text attackText;
+    [SerializeField] TMP_Text healthText;
 
     Rigidbody2D rb;
-    Vector2 velocity;
-    IEnumerator moveCoroutine;
+
+    int attack = 2;
+    int health = 5;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    void Start()
+    {
+        attackText.text = attack.ToString();
+        healthText.text = health.ToString();
     }
 
     void OnMouseDown()
@@ -39,47 +47,20 @@ public class Player : MonoBehaviour
 
         rb.AddForce(direction * speed);
 
-        // Move(direction * speed, drag);
-
         aim.SetActive(false);
     }
 
-    // void OnCollisionEnter2D(Collision2D col)
-    // {
-    //     var direction = Vector2.Reflect(velocity.normalized, col.contacts[0].normal) * velocity.magnitude;
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Enemy")
+        {
+            col.gameObject.GetComponent<Enemy>().SetDamage(attack, SetDamage);
+        }
+    }
 
-    //     Move(direction, drag);
-    // }
-
-    // void Move(Vector2 direction, float deceleration)
-    // {
-    //     if (moveCoroutine != null)
-    //         StopCoroutine(moveCoroutine);
-
-    //     moveCoroutine = MoveCoroutine(direction, deceleration);
-    //     StartCoroutine(moveCoroutine);
-    // }
-
-    // IEnumerator MoveCoroutine(Vector2 direction, float deceleration)
-    // {
-    //     velocity = direction;
-
-    //     while (velocity != Vector2.zero)
-    //     {
-    //         var radius = velocity.magnitude - deceleration;
-
-    //         if (radius < 0.001f)
-    //         {
-    //             velocity = Vector2.zero;
-    //             break;
-    //         }
-
-    //         velocity = velocity.normalized * radius;
-
-    //         var distancia = (Vector2) transform.position + velocity * Time.fixedDeltaTime;
-    //         rb.MovePosition(distancia);
-
-    //         yield return 0;
-    //     }
-    // }
+    void SetDamage(int damage)
+    {
+        health -= damage;
+        healthText.text = health.ToString();
+    }
 }
