@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -16,20 +15,17 @@ public class Enemy : MonoBehaviour
         healthText.text = health.ToString();
     }
 
-    public void SetDamage(int damage, Action<int> damageBack)
+    public void SetDamage(int damage)
     {
         health -= damage;
 
         if (health <= 0)
         {
             health = 0;
-            damageBack(attack);
             Die();
         }
 
         healthText.text = health.ToString();
-
-        damageBack(attack);
     }
 
     void Die()

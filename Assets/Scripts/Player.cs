@@ -1,27 +1,22 @@
-using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] GameObject aim;
     [SerializeField] float speed;
-    [SerializeField] TMP_Text attackText;
-    [SerializeField] TMP_Text healthText;
 
+    Animator anim;
     Rigidbody2D rb;
+    SpriteRenderer spriteRenderer;
 
     int attack = 2;
     int health = 5;
 
     void Awake()
     {
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-    }
-
-    void Start()
-    {
-        attackText.text = attack.ToString();
-        healthText.text = health.ToString();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void OnMouseDown()
@@ -47,6 +42,8 @@ public class Player : MonoBehaviour
 
         rb.AddForce(direction * speed);
 
+        MoveAnimation(direction);
+
         aim.SetActive(false);
     }
 
@@ -54,13 +51,22 @@ public class Player : MonoBehaviour
     {
         if (col.gameObject.tag == "Enemy")
         {
-            col.gameObject.GetComponent<Enemy>().SetDamage(attack, SetDamage);
+            col.gameObject.GetComponent<Enemy>().SetDamage(attack);
         }
+        else
+        {
+            MoveAnimation(rb.velocity);
+        }
+    }
+
+    void MoveAnimation(Vector2 direction)
+    {
+        spriteRenderer.flipX = direction.x < 0;
+        anim.SetBool("dash", true);
     }
 
     void SetDamage(int damage)
     {
         health -= damage;
-        healthText.text = health.ToString();
     }
 }
