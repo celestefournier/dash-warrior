@@ -4,6 +4,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] GameObject aim;
     [SerializeField] float speed;
+    [SerializeField] CameraShake cameraShake;
 
     Animator anim;
     Rigidbody2D rb;
@@ -11,6 +12,7 @@ public class Player : MonoBehaviour
 
     int attack = 2;
     int health = 5;
+    Vector2 lastVelocity;
 
     void Awake()
     {
@@ -42,7 +44,7 @@ public class Player : MonoBehaviour
 
         rb.AddForce(direction * speed);
 
-        MoveAnimation(direction);
+        DashAnimation(direction);
 
         aim.SetActive(false);
     }
@@ -52,17 +54,27 @@ public class Player : MonoBehaviour
         if (col.gameObject.tag == "Enemy")
         {
             col.gameObject.GetComponent<Enemy>().SetDamage(attack);
+            anim.SetTrigger("attack");
+            lastVelocity = rb.velocity;
+            rb.velocity = Vector2.zero;
+            cameraShake.Shake();
         }
         else
         {
-            MoveAnimation(rb.velocity);
+            DashAnimation(rb.velocity);
         }
     }
 
-    void MoveAnimation(Vector2 direction)
+    void DashAnimation(Vector2 direction)
     {
         spriteRenderer.flipX = direction.x < 0;
         anim.SetBool("dash", true);
+    }
+
+    void OnAttackComplete()
+    {
+        rb.velocity = lastVelocity;
+        DashAnimation(rb.velocity);
     }
 
     void SetDamage(int damage)
