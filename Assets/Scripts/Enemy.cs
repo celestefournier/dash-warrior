@@ -1,21 +1,20 @@
-using TMPro;
+using System;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] TMP_Text attackText;
-    [SerializeField] TMP_Text healthText;
+    [SerializeField] HealthBar healthBar;
 
-    int attack = 1;
-    int health = 3;
+    int maxHealth = 3;
+    int health;
+    bool firstDamage;
 
-    void Start()
+    void Awake()
     {
-        attackText.text = attack.ToString();
-        healthText.text = health.ToString();
+        health = maxHealth;
     }
 
-    public void SetDamage(int damage)
+    public void SetDamage(int damage, Action onDie = null)
     {
         health -= damage;
 
@@ -23,9 +22,16 @@ public class Enemy : MonoBehaviour
         {
             health = 0;
             Die();
+            onDie?.Invoke();
         }
 
-        healthText.text = health.ToString();
+        if (!firstDamage)
+        {
+            healthBar.gameObject.SetActive(true);
+            firstDamage = true;
+        }
+
+        healthBar.SetValue(health, maxHealth);
     }
 
     void Die()

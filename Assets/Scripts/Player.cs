@@ -7,7 +7,6 @@ public class Player : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] GameController gameController;
     [SerializeField] CameraShake cameraShake;
-    [SerializeField] float minVel;
 
     Animator anim;
     Rigidbody2D rb;
@@ -15,7 +14,7 @@ public class Player : MonoBehaviour
 
     bool isMoving;
     bool isAttacking;
-    int attack = 2;
+    int attack = 1;
     int health = 5;
     Vector2 lastVelocity;
 
@@ -72,7 +71,7 @@ public class Player : MonoBehaviour
         if (col.gameObject.tag == "Enemy")
         {
             isAttacking = true;
-            // col.gameObject.GetComponent<Enemy>().SetDamage(attack);
+            col.gameObject.GetComponent<Enemy>().SetDamage(attack);
             anim.SetTrigger("attack");
             lastVelocity = rb.velocity;
             rb.velocity = Vector2.zero;
@@ -106,7 +105,7 @@ public class Player : MonoBehaviour
         // Wait for velocity to process AddForce
         yield return new WaitForSeconds(0.1f);
 
-        while (rb.velocity.magnitude > minVel || isAttacking)
+        while (rb.velocity.magnitude > 1 || isAttacking)
         {
             yield return new WaitForSeconds(0.5f);
         }

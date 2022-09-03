@@ -755,7 +755,6 @@ MonoBehaviour:
   speed: 1000
   gameController: {fileID: 27808712}
   cameraShake: {fileID: 519420033}
-  minVel: 0
 --- !u!95 &852304401
 Animator:
   serializedVersion: 4
@@ -2242,10 +2241,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793499007}
     m_Modifications:
-    - target: {fileID: 8847468709263766378, guid: f36f5daa997d82c4ca99f0669117b180, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8847468709263766381, guid: f36f5daa997d82c4ca99f0669117b180, type: 3}
       propertyPath: m_Name
       value: Bat
