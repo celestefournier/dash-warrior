@@ -170,6 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 8847468709864677489}
+  hitMaterial: {fileID: 2100000, guid: 460eb107438ab4e4489ae89058d9de00, type: 2}
 --- !u!1 &8847468709430953504
 GameObject:
   m_ObjectHideFlags: 0

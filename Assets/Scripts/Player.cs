@@ -7,10 +7,13 @@ public class Player : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] GameController gameController;
     [SerializeField] CameraShake cameraShake;
+    [SerializeField] Material hitMaterial;
 
     Animator anim;
     Rigidbody2D rb;
-    SpriteRenderer spriteRenderer;
+    SpriteRenderer sprite;
+    Material materialDefault;
+    IEnumerator damageCoroutine;
 
     bool isMoving;
     bool isAttacking;
@@ -22,7 +25,8 @@ public class Player : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        sprite = GetComponent<SpriteRenderer>();
+        materialDefault = sprite.material;
     }
 
     void OnMouseDown()
@@ -86,9 +90,9 @@ public class Player : MonoBehaviour
     void DashAnimation(Vector2 direction)
     {
         if (direction.x > 0)
-            spriteRenderer.flipX = false;
+            sprite.flipX = false;
         else if (direction.x < 0)
-            spriteRenderer.flipX = true;
+            sprite.flipX = true;
 
         anim.SetBool("dash", true);
     }
@@ -119,5 +123,21 @@ public class Player : MonoBehaviour
     void SetDamage(int damage)
     {
         health -= damage;
+
+        if (damageCoroutine != null)
+        {
+            StopCoroutine(damageCoroutine);
+        }
+
+        damageCoroutine = DamageEffect();
+        StartCoroutine(damageCoroutine);
+    }
+
+    IEnumerator DamageEffect()
+    {
+        sprite.material = hitMaterial;
+        yield return new WaitForSeconds(0.1f);
+        sprite.material = materialDefault;
+        damageCoroutine = null;
     }
 }
