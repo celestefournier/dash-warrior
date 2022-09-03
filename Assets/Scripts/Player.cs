@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
         if (col.gameObject.tag == "Enemy")
         {
             isAttacking = true;
-            col.gameObject.GetComponent<Enemy>().SetDamage(attack);
+            // col.gameObject.GetComponent<Enemy>().SetDamage(attack);
             anim.SetTrigger("attack");
             lastVelocity = rb.velocity;
             rb.velocity = Vector2.zero;
