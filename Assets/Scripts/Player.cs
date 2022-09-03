@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject aim;
     [SerializeField] float speed;
     [SerializeField] GameController gameController;
+    [SerializeField] GameObject hitEffectPrefab;
     [SerializeField] CameraShake cameraShake;
     [SerializeField] Material hitMaterial;
 
@@ -80,6 +81,7 @@ public class Player : MonoBehaviour
             lastVelocity = rb.velocity;
             rb.velocity = Vector2.zero;
             cameraShake.Shake();
+            Instantiate(hitEffectPrefab, col.contacts[0].point, Quaternion.identity);
         }
         else
         {

@@ -754,7 +754,9 @@ MonoBehaviour:
   aim: {fileID: 972618597}
   speed: 1000
   gameController: {fileID: 27808712}
+  hitEffectPrefab: {fileID: 5606846191445821502, guid: ebf6e911d2370bc4483ed4d10cbe28b0, type: 3}
   cameraShake: {fileID: 519420033}
+  hitMaterial: {fileID: 2100000, guid: 460eb107438ab4e4489ae89058d9de00, type: 2}
 --- !u!95 &852304401
 Animator:
   serializedVersion: 4
