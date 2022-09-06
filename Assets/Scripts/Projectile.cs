@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -6,6 +7,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] float speed;
 
     int damage;
+    Action onDestroy;
 
     Rigidbody2D rb;
 
@@ -14,26 +16,27 @@ public class Projectile : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Init(Vector2 position, int damage)
+    public void Init(Vector2 position, int damage, Action onDestroy)
     {
         this.damage = damage;
+        this.onDestroy = onDestroy;
         rb.velocity = position.normalized * speed;
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.tag is "Player")
+        if (col.tag is "Enemy" or "Projectile")
         {
-            col.GetComponent<Player>().SetDamage(damage);
-            Instantiate(hitEffectPrefab, col.ClosestPoint(transform.position), Quaternion.identity);
-            Destroy(gameObject);
             return;
         }
 
-        if (col.tag != "Enemy" && col.tag != "Projectile")
+        if (col.tag is "Player")
         {
-            Instantiate(hitEffectPrefab, col.ClosestPoint(transform.position), Quaternion.identity);
-            Destroy(gameObject);
+            col.GetComponent<Player>().SetDamage(damage);
         }
+
+        Instantiate(hitEffectPrefab, col.ClosestPoint(transform.position), Quaternion.identity);
+        onDestroy();
+        Destroy(gameObject);
     }
 }

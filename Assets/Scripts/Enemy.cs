@@ -13,7 +13,8 @@ public class Enemy : MonoBehaviour
     int maxHealth = 3;
     int health;
     bool firstDamage;
-
+    Action dieListener;
+    
     SpriteRenderer sprite;
     Material materialDefault;
     IEnumerator damageCoroutine;
@@ -25,22 +26,35 @@ public class Enemy : MonoBehaviour
         materialDefault = sprite.material;
     }
 
-    void Start()
+    public void Init(Action dieListener)
     {
-        Attack();
+        this.dieListener = dieListener;
     }
 
-    public void Attack()
+    public void Attack(Action onComplete)
     {
         var willAttack = Random.Range(0f, 1f) > 0.5f;
 
         if (!willAttack)
-            return;
-
-        for (int j = 0; j < 8; j++)
         {
-            var angle = Math.AngleToVector(360 / 8 * j);
-            Instantiate(projectilePrefab, transform.position, Quaternion.identity).Init(angle, attack);
+            onComplete();
+            return;
+        }
+
+        int projectiles = 8;
+        int destroyedProjectiles = 0;
+
+        for (int j = 0; j < projectiles; j++)
+        {
+            var angle = Math.AngleToVector(360 / projectiles * j);
+
+            Instantiate(projectilePrefab, transform.position, Quaternion.identity).Init(angle, attack, () =>
+            {
+                destroyedProjectiles++;
+
+                if (destroyedProjectiles >= projectiles)
+                    onComplete();
+            });
         }
     }
 
@@ -107,6 +121,7 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        dieListener();
         Destroy(gameObject);
     }
 }

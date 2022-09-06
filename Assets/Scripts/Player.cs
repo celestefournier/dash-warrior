@@ -10,29 +10,37 @@ public class Player : MonoBehaviour
     [SerializeField] CameraShake cameraShake;
     [SerializeField] Material hitMaterial;
 
+    bool isMoving;
+    bool isAttacking;
+    int attack = 1;
+    int maxHealth = 5;
+    int health;
+    bool playerTurn;
+
+    Vector2 lastVelocity;
     Animator anim;
     Rigidbody2D rb;
     SpriteRenderer sprite;
     Material materialDefault;
     IEnumerator damageCoroutine;
 
-    bool isMoving;
-    bool isAttacking;
-    int attack = 1;
-    int health = 5;
-    Vector2 lastVelocity;
-
     void Awake()
     {
+        health = maxHealth;
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         materialDefault = sprite.material;
     }
 
+    public void StartTurn()
+    {
+        playerTurn = true;
+    }
+
     void OnMouseDown()
     {
-        if (!gameController.playerTurn || isMoving)
+        if (!playerTurn || isMoving)
             return;
 
         aim.SetActive(true);
@@ -40,7 +48,7 @@ public class Player : MonoBehaviour
 
     void OnMouseDrag()
     {
-        if (!gameController.playerTurn || isMoving)
+        if (!playerTurn || isMoving)
             return;
 
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -54,7 +62,7 @@ public class Player : MonoBehaviour
 
     void OnMouseUp()
     {
-        if (!gameController.playerTurn || isMoving)
+        if (!playerTurn || isMoving)
             return;
 
         isMoving = true;
@@ -70,7 +78,7 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (!gameController.playerTurn)
+        if (!playerTurn)
             return;
 
         if (col.gameObject.tag == "Enemy")
@@ -117,12 +125,13 @@ public class Player : MonoBehaviour
         }
 
         isMoving = false;
+        playerTurn = false;
         rb.velocity = Vector2.zero;
         anim.SetBool("dash", false);
-        // gameController.EndTurn(Turn.Player);
+        gameController.EndTurn(Turn.Player);
     }
 
-    void SetDamage(int damage)
+    public void SetDamage(int damage)
     {
         health -= damage;
 
