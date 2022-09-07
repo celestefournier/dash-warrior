@@ -1,22 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] Transform bar;
-
-    float totalWidth;
-
-    void Awake()
-    {
-        totalWidth = bar.localScale.x;
-    }
+    [SerializeField] Image bar;
 
     public void SetValue(float health, float maxHealth)
     {
-        bar.localScale = new Vector3(
-            health / maxHealth * totalWidth,
-            bar.localScale.y,
-            bar.localScale.z
-        );
+        bar.fillAmount = health / maxHealth;
     }
 }

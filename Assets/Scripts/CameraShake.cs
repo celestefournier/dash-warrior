@@ -16,6 +16,14 @@ public class CameraShake : MonoBehaviour
         startPosition = transform.position;
     }
 
+    public void SmallShake()
+    {
+        cam.DOShakePosition(0.3f, 0.15f, 20).OnComplete(() =>
+        {
+            cam.transform.position = startPosition;
+        });
+    }
+
     public void Shake()
     {
         cam.DOShakePosition(duration, strength, vibrato).OnComplete(() =>

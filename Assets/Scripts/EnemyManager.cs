@@ -24,7 +24,7 @@ public class EnemyManager : MonoBehaviour
             Random.Range(spawnStartRange.x, spawnEndRange.x),
             Random.Range(spawnStartRange.y, spawnEndRange.y)
         );
-        RaycastHit2D hit = Physics2D.CircleCast(randomPos, 1.6f, Vector2.zero);
+        RaycastHit2D hit = Physics2D.CircleCast(randomPos, 1.8f, Vector2.zero);
 
         while (hit.collider != null)
         {
@@ -32,7 +32,7 @@ public class EnemyManager : MonoBehaviour
                 Random.Range(spawnStartRange.x, spawnEndRange.x),
                 Random.Range(spawnStartRange.y, spawnEndRange.y)
             );
-            hit = Physics2D.CircleCast(randomPos, 1.6f, Vector2.zero);
+            hit = Physics2D.CircleCast(randomPos, 1.8f, Vector2.zero);
 
             if (++antibug > 20)
                 break;

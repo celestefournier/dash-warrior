@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] HealthBar healthBar;
+    [SerializeField] HealthBarSmall healthBar;
     [SerializeField] Material hitMaterial;
     [SerializeField] Projectile projectilePrefab;
 

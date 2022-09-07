@@ -9,11 +9,12 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject hitEffectPrefab;
     [SerializeField] CameraShake cameraShake;
     [SerializeField] Material hitMaterial;
+    [SerializeField] HealthBar healthBar;
 
     bool isMoving;
     bool isAttacking;
     int attack = 1;
-    int maxHealth = 5;
+    int maxHealth = 10;
     int health;
     bool playerTurn;
 
@@ -31,6 +32,11 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         materialDefault = sprite.material;
+    }
+
+    void Start()
+    {
+        healthBar.SetValue(health, maxHealth);
     }
 
     public void StartTurn()
@@ -142,6 +148,9 @@ public class Player : MonoBehaviour
 
         damageCoroutine = DamageEffect();
         StartCoroutine(damageCoroutine);
+
+        cameraShake.SmallShake();
+        healthBar.SetValue(health, maxHealth);
     }
 
     IEnumerator DamageEffect()

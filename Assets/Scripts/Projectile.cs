@@ -30,9 +30,9 @@ public class Projectile : MonoBehaviour
             return;
         }
 
-        if (col.tag is "Player")
+        if (col.attachedRigidbody.tag is "Player")
         {
-            col.GetComponent<Player>().SetDamage(damage);
+            col.attachedRigidbody.GetComponent<Player>().SetDamage(damage);
         }
 
         Instantiate(hitEffectPrefab, col.ClosestPoint(transform.position), Quaternion.identity);
